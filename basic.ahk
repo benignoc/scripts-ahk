@@ -1,12 +1,22 @@
-; WINDOWS KEY + H TOGGLES HIDDEN FILES 
-#h:: 
-RegRead, HiddenFiles_Status, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden 
-If HiddenFiles_Status = 2  
-RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1 
-Else  
-RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2 
-WinGetClass, eh_Class,A 
-If (eh_Class = "#32770" OR A_OSVersion = "WIN_VISTA") 
-send, {F5} 
-Else PostMessage, 0x111, 28931,,, A 
-Return
+; Function to Toggle minimize of a window
+ToggleWinMinimize(TheWindowTitle)
+{
+    SetTitleMatchMode,2
+    DetectHiddenWindows, Off
+    IfWinActive, %TheWindowTitle%
+    {
+        WinMinimize, %TheWindowTitle%
+    }
+    Else
+    {
+        IfWinExist, %TheWindowTitle%
+        {
+        WinGet, winid, ID, %TheWindowTitle%
+        DllCall("SwitchToThisWindow", "UInt", winid, "UInt", 1)
+        }
+    }
+    Return
+}
+; GOTO and MINIMIZE Windows
+#+w::ToggleWinMinimize("Google Chrome")
+#+e::ToggleWinMinimize("Visual Studio Code")
