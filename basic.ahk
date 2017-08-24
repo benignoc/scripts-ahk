@@ -105,3 +105,20 @@ return
     Run, http://www.google.com/search?q=%clipboard%
     Return
 }
+
+; Insert a timestamp
+::ymd::
+FormatTime, TimeString, , yyyy-MM-dd
+Send %TimeString%
+Return
+
+; Run in 
+#+n::
+clipboard = netsh interface ipv4 set address name="Wi-Fi" source=dhcp 
+MsgBox "Copied home network netsh"
+Return
+
+#+m::
+clipboard = netsh interface ipv4 set address name="Wi-Fi" source=static address=172.26.4.80 mask=255.255.255.0 gateway=172.26.4.5
+MsgBox "Copied work network netsh"
+Return
